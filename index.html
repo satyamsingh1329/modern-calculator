@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniCalc — All-in-One Modern Calculator</title>
+  <meta name="description" content="OmniCalc: A refined, modern, all-in-one calculator suite featuring standard & scientific computation, smart notebook, universal unit conversions, lifestyle finance calculators, recipe scaling, and programmer tools.">
+
+  <!-- Favicon SVG -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='25' fill='%23080914'/><circle cx='50' cy='50' r='35' fill='none' stroke='%2300f2fe' stroke-width='8'/><path d='M35 50h30M50 35v30' stroke='%237f00ff' stroke-width='8' stroke-linecap='round'/></svg>">
+
+  <!-- Core Stylesheet -->
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="theme-cyber-midnight">
+  <!-- Subtle Ambient Background Canvas -->
+  <div class="canvas-bg-mesh" aria-hidden="true"></div>
+
+  <!-- Main Shell -->
+  <div class="app-container">
+
+    <!-- Header Section -->
+    <header class="app-header">
+      <div class="brand-section">
+        <div class="brand-logo-icon" aria-hidden="true">⚡</div>
+        <div class="brand-text-block">
+          <h1 class="brand-title">OmniCalc</h1>
+          <p class="brand-subtitle">All-in-One Modern Calculator</p>
+        </div>
+        <div class="brand-status-tag" role="status" aria-live="polite">
+          <span class="status-pulse-dot" aria-hidden="true"></span>
+          <span id="active-mode-badge">Standard Calculator</span>
+        </div>
+      </div>
+
+      <!-- Action Toolbar -->
+      <div class="header-actions">
+        <!-- Sound FX Toggle -->
+        <button id="btn-audio-toggle" class="glass-btn audio-active" title="Sound Effects: Toggle Mute" aria-label="Toggle Sound Effects">
+          <span id="audio-wave-icon" aria-hidden="true">🔊</span>
+          <span class="btn-text">Sound Effects</span>
+        </button>
+
+        <!-- Theme Picker -->
+        <div class="theme-select-wrap">
+          <label for="theme-select-dropdown" class="sr-only">Select Theme</label>
+          <select id="theme-select-dropdown" class="glass-select" title="Change Theme">
+            <option value="theme-cyber-midnight">Cyber Midnight</option>
+            <option value="theme-matrix-emerald">Matrix Emerald</option>
+            <option value="theme-cyberpunk-sunset">Cyberpunk Sunset</option>
+            <option value="theme-frost-light">Frost Light</option>
+          </select>
+        </div>
+
+        <!-- Show Steps Modal Button -->
+        <button id="btn-show-steps-modal" class="glass-btn glass-btn-accent" title="Show order of operations breakdown" aria-label="Show calculation steps">
+          <span aria-hidden="true">🧠</span>
+          <span class="btn-text">Show Steps</span>
+        </button>
+
+        <!-- Secondary Actions Menu -->
+        <div class="secondary-actions-group">
+          <button id="btn-keyboard-shortcuts" class="glass-btn" title="View keyboard shortcuts (?)" aria-label="Keyboard shortcuts guide">
+            <span aria-hidden="true">⌨️</span>
+            <span class="btn-text">Help</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mobile Mode Navigation Bar (Visible on mobile/tablet for instant 1-tap switching) -->
+    <nav class="mobile-mode-bar" aria-label="Mobile Mode Switcher">
+      <button class="mobile-mode-pill active-mode" data-mode-btn="standard">
+        <span>🧮</span> Standard
+      </button>
+      <button class="mobile-mode-pill" data-mode-btn="notebook">
+        <span>📝</span> Notebook
+      </button>
+      <button class="mobile-mode-pill" data-mode-btn="converter">
+        <span>🔄</span> Converter
+      </button>
+      <button class="mobile-mode-pill" data-mode-btn="lifestyle">
+        <span>⏱️</span> Finance
+      </button>
+      <button class="mobile-mode-pill" data-mode-btn="chef">
+        <span>🍳</span> Recipe
+      </button>
+      <button class="mobile-mode-pill" data-mode-btn="programmer">
+        <span>👾</span> Programmer
+      </button>
+    </nav>
+
+    <!-- Core 3-Column Grid Architecture -->
+    <main class="main-grid-layout">
+
+      <!-- COLUMN 1: LEFT SIDEBAR (Navigation, Memory, Constants) -->
+      <aside class="glass-card sidebar-panel" aria-label="Modes and Quick Tools">
+        <div class="sidebar-header-row">
+          <span class="sidebar-title">Modes</span>
+          <span class="sidebar-hotkey-hint">Shortcuts</span>
+        </div>
+
+        <nav class="mode-nav-list" aria-label="Calculator Modes">
+          <button class="mode-nav-btn active-mode" data-mode-btn="standard">
+            <div class="mode-btn-content">
+              <span class="mode-icon" aria-hidden="true">🧮</span>
+              <span>Standard Calculator</span>
+            </div>
+            <span class="mode-hotkey">Alt+1</span>
+          </button>
+
+          <button class="mode-nav-btn" data-mode-btn="notebook">
+            <div class="mode-btn-content">
+              <span class="mode-icon" aria-hidden="true">📝</span>
+              <span>Notebook</span>
+            </div>
+            <span class="mode-hotkey">Alt+2</span>
+          </button>
+
+          <button class="mode-nav-btn" data-mode-btn="converter">
+            <div class="mode-btn-content">
+              <span class="mode-icon" aria-hidden="true">🔄</span>
+              <span>Unit Converter</span>
+            </div>
+            <span class="mode-hotkey">Alt+3</span>
+          </button>
+
+          <button class="mode-nav-btn" data-mode-btn="lifestyle">
+            <div class="mode-btn-content">
+              <span class="mode-icon" aria-hidden="true">⏱️</span>
+              <span>Lifestyle & Finance</span>
+            </div>
+            <span class="mode-hotkey">Alt+4</span>
+          </button>
+
+          <button class="mode-nav-btn" data-mode-btn="chef">
+            <div class="mode-btn-content">
+              <span class="mode-icon" aria-hidden="true">🍳</span>
+              <span>Recipe Calculator</span>
+            </div>
+            <span class="mode-hotkey">Alt+5</span>
+          </button>
+
+          <button class="mode-nav-btn" data-mode-btn="programmer">
+            <div class="mode-btn-content">
+              <span class="mode-icon" aria-hidden="true">👾</span>
+              <span>Programmer</span>
+            </div>
+            <span class="mode-hotkey">Alt+6</span>
+          </button>
+        </nav>
+
+        <!-- Memory Registers Block -->
+        <div class="quick-tools-box">
+          <div class="memory-status-row">
+            <span class="sidebar-title" style="margin:0;">Memory</span>
+            <span id="memory-val-badge" class="memory-badge" aria-live="polite">M: 0</span>
+          </div>
+          <div class="mem-btn-grid" role="group" aria-label="Memory Controls">
+            <button class="mem-btn" data-mem-op="MC" title="Memory Clear (MC)" aria-label="Memory Clear">MC</button>
+            <button class="mem-btn" data-mem-op="MR" title="Memory Recall (MR)" aria-label="Memory Recall">MR</button>
+            <button class="mem-btn" data-mem-op="M+" title="Memory Add (M+)" aria-label="Memory Add">M+</button>
+            <button class="mem-btn" data-mem-op="M-" title="Memory Subtract (M-)" aria-label="Memory Subtract">M-</button>
+            <button class="mem-btn" data-mem-op="MS" title="Memory Store (MS)" aria-label="Memory Store">MS</button>
+          </div>
+        </div>
+
+        <!-- Scientific Constants Block -->
+        <div class="quick-tools-box">
+          <div class="sidebar-title">Constants</div>
+          <div class="constants-pill-grid" role="group" aria-label="Scientific Constants">
+            <button class="const-pill" data-insert-constant="π" title="Pi (3.14159...)">π</button>
+            <button class="const-pill" data-insert-constant="e" title="Euler's Number (2.71828...)">e</button>
+            <button class="const-pill" data-insert-constant="φ" title="Golden Ratio (1.61803...)">φ</button>
+            <button class="const-pill" data-insert-constant="c" title="Speed of Light (299,792,458 m/s)">c</button>
+            <button class="const-pill" data-insert-constant="h" title="Planck Constant (6.626e-34)">h</button>
+            <button class="const-pill" data-insert-constant="g" title="Standard Gravity (9.80665 m/s²)">g</button>
+          </div>
+        </div>
+      </aside>
+
+      <!-- COLUMN 2: CENTER HERO STAGE (Main Calculator & Workspaces) -->
+      <section class="glass-card stage-panel" aria-label="Active Calculator Mode">
+
+        <!-- ============================================== -->
+        <!-- MODE 1: STANDARD & SCIENTIFIC CALCULATOR       -->
+        <!-- ============================================== -->
+        <div class="mode-panel active-panel" data-mode-panel="standard">
+
+          <!-- Focal Point: Multi-Tier Display Unit -->
+          <div class="calc-display-unit" role="region" aria-label="Calculator Display">
+            <div class="display-meta-row">
+              <div class="meta-badges-left">
+                <button id="btn-deg-rad" class="tag-badge" title="Toggle Angle: DEG / RAD / GRAD" aria-label="Angle mode">DEG</button>
+                <button id="btn-shift-2nd" class="tag-badge" title="Toggle 2nd Functions" aria-label="Shift functions">2nd</button>
+              </div>
+              <div class="display-meta-right">
+                <span class="keyboard-hint-tag" title="Press ? on your keyboard for shortcuts">⌨ Press ? for shortcuts</span>
+                <div id="calc-live-preview" class="calc-live-preview" title="Live Preview" aria-live="polite"></div>
+              </div>
+            </div>
+
+            <!-- Primary Interactive Expression Input -->
+            <input type="text"
+                   id="calc-expression-input"
+                   class="calc-expression-input"
+                   placeholder="Enter calculation..."
+                   autocomplete="off"
+                   spellcheck="false"
+                   aria-label="Calculator Formula Input">
+
+            <!-- Primary Large Result Display -->
+            <div class="display-bottom-row">
+              <div id="visual-fraction-text" class="fraction-info-text"></div>
+              <div id="calc-primary-result" class="calc-primary-result" role="status" aria-live="polite">0</div>
+            </div>
+          </div>
+
+          <!-- Fraction & Prime Factor Insight Strip -->
+          <div class="fraction-insight-strip" aria-label="Visual Calculation Insights">
+            <div class="fraction-canvas-wrap">
+              <canvas id="visual-fraction-canvas" width="76" height="76" aria-label="Fraction visualization donut chart"></canvas>
+            </div>
+            <div class="prime-factors-box" id="prime-factors-box"></div>
+          </div>
+
+          <!-- Keypad Matrix (3 Clear Visual Levels) -->
+          <div class="keypad-matrix" role="group" aria-label="Calculator Keypad">
+            <!-- Row 1: Functions (Level 2) -->
+            <button class="key-btn btn-fn" data-shift-key="true"
+                    data-primary-label="sin" data-shift-label="asin"
+                    data-primary-insert="sin(" data-shift-insert="asin(" data-insert="sin(" aria-label="Sine">sin</button>
+            <button class="key-btn btn-fn" data-shift-key="true"
+                    data-primary-label="cos" data-shift-label="acos"
+                    data-primary-insert="cos(" data-shift-insert="acos(" data-insert="cos(" aria-label="Cosine">cos</button>
+            <button class="key-btn btn-fn" data-shift-key="true"
+                    data-primary-label="tan" data-shift-label="atan"
+                    data-primary-insert="tan(" data-shift-insert="atan(" data-insert="tan(" aria-label="Tangent">tan</button>
+            <button class="key-btn btn-fn" data-shift-key="true"
+                    data-primary-label="ln" data-shift-label="e<sup>x</sup>"
+                    data-primary-insert="ln(" data-shift-insert="exp(" data-insert="ln(" aria-label="Natural Log">ln</button>
+            <button class="key-btn btn-fn" data-shift-key="true"
+                    data-primary-label="log" data-shift-label="10<sup>x</sup>"
+                    data-primary-insert="log(" data-shift-insert="10^(" data-insert="log(" aria-label="Log Base 10">log</button>
+
+            <!-- Row 2: Powers, Roots, Brackets (Level 2) -->
+            <button class="key-btn btn-fn" data-shift-key="true"
+                    data-primary-label="√" data-shift-label="x²"
+                    data-primary-insert="sqrt(" data-shift-insert="^2" data-insert="sqrt(" aria-label="Square Root">√</button>
+            <button class="key-btn btn-fn" data-insert="^" aria-label="Power of x to y">x<sup>y</sup></button>
+            <button class="key-btn btn-fn" data-insert="!" aria-label="Factorial">x!</button>
+            <button class="key-btn btn-op" data-insert="(" aria-label="Open parenthesis">(</button>
+            <button class="key-btn btn-op" data-insert=")" aria-label="Close parenthesis">)</button>
+
+            <!-- Row 3: Action Controls & Operators -->
+            <button class="key-btn btn-action-clear" id="btn-clear" title="Clear All (Esc)" aria-label="Clear All">AC</button>
+            <button class="key-btn btn-action-del" id="btn-delete" title="Backspace (Del)" aria-label="Delete last character">DEL</button>
+            <button class="key-btn btn-op" data-insert="%" aria-label="Percentage">%</button>
+            <button class="key-btn btn-op" data-insert="mod" aria-label="Modulo">mod</button>
+            <button class="key-btn btn-op" data-insert="÷" aria-label="Divide">÷</button>
+
+            <!-- Row 4: Numpad 7-9 (Level 1) & Operators -->
+            <button class="key-btn btn-num" data-insert="7">7</button>
+            <button class="key-btn btn-num" data-insert="8">8</button>
+            <button class="key-btn btn-num" data-insert="9">9</button>
+            <button class="key-btn btn-fn" data-insert="1/" aria-label="Reciprocal">1/x</button>
+            <button class="key-btn btn-op" data-insert="×" aria-label="Multiply">×</button>
+
+            <!-- Row 5: Numpad 4-6 (Level 1) & Operators -->
+            <button class="key-btn btn-num" data-insert="4">4</button>
+            <button class="key-btn btn-num" data-insert="5">5</button>
+            <button class="key-btn btn-num" data-insert="6">6</button>
+            <button class="key-btn btn-fn" data-insert="abs(" aria-label="Absolute value">|x|</button>
+            <button class="key-btn btn-op" data-insert="−" aria-label="Subtract">−</button>
+
+            <!-- Row 6: Numpad 1-3 (Level 1) & Operators -->
+            <button class="key-btn btn-num" data-insert="1">1</button>
+            <button class="key-btn btn-num" data-insert="2">2</button>
+            <button class="key-btn btn-num" data-insert="3">3</button>
+            <button class="key-btn btn-fn" data-insert="cbrt(" aria-label="Cube root">∛</button>
+            <button class="key-btn btn-op" data-insert="+" aria-label="Add">+</button>
+
+            <!-- Row 7: Numpad 0, Decimal, Constants & Equals (Level 3) -->
+            <button class="key-btn btn-num" data-insert="0">0</button>
+            <button class="key-btn btn-num" data-insert=".">.</button>
+            <button class="key-btn btn-fn" data-insert="π" aria-label="Pi Constant">π</button>
+            <button class="key-btn btn-fn" data-insert="ans" aria-label="Last Answer">ans</button>
+            <button class="key-btn btn-equals" id="btn-equals" title="Calculate (= / Enter)" aria-label="Calculate result">=</button>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- MODE 2: NOTEBOOK / SMART CANVAS                -->
+        <!-- ============================================== -->
+        <div class="mode-panel" data-mode-panel="notebook">
+          <div class="notebook-stage-wrap">
+            <div class="notebook-toolbar">
+              <div class="notebook-template-group">
+                <label for="notebook-template-select" class="field-label-sm">Template:</label>
+                <select id="notebook-template-select" class="glass-select">
+                  <option value="budget">Monthly Personal Budget</option>
+                  <option value="freelance">Freelance Invoice & Tax</option>
+                  <option value="physics">Physics Kinematics & Energy</option>
+                  <option value="tripSplit">Group Trip Expense Split</option>
+                </select>
+              </div>
+              <span class="notebook-hint-text">
+                Natural math: <code>salary = 5000</code>, <code>20% of X</code>, <code>L1 + 500</code>
+              </span>
+            </div>
+
+            <!-- Split Gutter Code Editor -->
+            <div class="notebook-split-editor">
+              <div id="notebook-line-numbers" class="notebook-line-numbers" aria-hidden="true"></div>
+              <textarea id="notebook-code-input"
+                        class="notebook-code-input"
+                        spellcheck="false"
+                        placeholder="Type mathematical expressions or define variables here..."
+                        aria-label="Notebook input area"></textarea>
+              <div id="notebook-gutter-results" class="notebook-gutter-results" aria-label="Calculated line results"></div>
+            </div>
+
+            <!-- Variables Live Inspector -->
+            <div class="variables-inspector-box">
+              <div class="section-title-sm">Active Variables</div>
+              <div class="table-responsive-wrap">
+                <table class="inspector-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Variable</th>
+                      <th scope="col" style="text-align:right;">Resolved Value</th>
+                      <th scope="col" style="text-align:right;">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="variables-table-body">
+                    <tr><td colspan="3" class="text-muted text-center py-2">No active variables</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- MODE 3: UNIT & CURRENCY CONVERTER              -->
+        <!-- ============================================== -->
+        <div class="mode-panel" data-mode-panel="converter">
+          <div class="converter-wrap">
+            <div class="converter-header-bar">
+              <div class="section-heading-group">
+                <h3 class="section-title">Unit & Currency Converter</h3>
+                <p class="section-subtitle">Real-time conversion across standard units & global currencies</p>
+              </div>
+              <div class="category-selector-wrap">
+                <label for="converter-category-select" class="field-label-sm">Category:</label>
+                <select id="converter-category-select" class="glass-select" aria-label="Conversion Category">
+                  <option value="currency">Currencies (USD, EUR, GBP, JPY, INR...)</option>
+                  <option value="length">Length & Distance</option>
+                  <option value="weight">Mass & Weight</option>
+                  <option value="temperature">Temperature (°C, °F, K)</option>
+                  <option value="data">Digital Storage & Data</option>
+                  <option value="speed">Speed & Velocity</option>
+                  <option value="area">Area & Land</option>
+                  <option value="volume">Volume & Liquid</option>
+                  <option value="time">Time Duration</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Two-Way Interactive Conversion Cards (From ... ⇅ ... To ...) -->
+            <div class="conv-inputs-grid">
+              <div class="conv-input-card">
+                <span class="conv-step-tag">FROM</span>
+                <div class="conv-controls-row">
+                  <input type="number" id="converter-val-a" class="conv-num-input" value="100" step="any" aria-label="Input value to convert">
+                  <select id="converter-unit-a" class="glass-select conv-unit-select" aria-label="From unit"></select>
+                </div>
+              </div>
+
+              <button id="converter-swap-btn" class="btn-swap-conv" title="Swap Units" aria-label="Swap from and to units">⇅</button>
+
+              <div class="conv-input-card conv-result-card">
+                <span class="conv-step-tag">TO (RESULT)</span>
+                <div class="conv-controls-row">
+                  <input type="number" id="converter-val-b" class="conv-num-input conv-result-input" value="0" step="any" aria-label="Converted result value">
+                  <select id="converter-unit-b" class="glass-select conv-unit-select" aria-label="To unit"></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Universal Category Matrix View -->
+            <div class="matrix-section-wrap">
+              <div class="section-title-sm">Category Conversion Matrix</div>
+              <div id="converter-matrix-grid" class="converter-matrix-grid"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- MODE 4: LIFESTYLE & FINANCE ENGINE             -->
+        <!-- ============================================== -->
+        <div class="mode-panel" data-mode-panel="lifestyle">
+          <div class="lifestyle-wrap">
+
+            <!-- Wage-to-Time Opportunity Cost -->
+            <div class="stats-card-mini">
+              <div class="section-heading-group" style="margin-bottom:12px;">
+                <h3 class="section-title">Wage-to-Time Calculator</h3>
+                <p class="section-subtitle">Calculate how much working time an expense represents</p>
+              </div>
+
+              <div class="lifestyle-inputs-row">
+                <div class="input-field-group">
+                  <label for="wage-rate-input" class="field-label-sm">Your Income Rate ($):</label>
+                  <div class="input-with-addon">
+                    <input type="number" id="wage-rate-input" class="glass-select" value="35" min="1" step="any">
+                    <select id="wage-type-select" class="glass-select" aria-label="Income frequency">
+                      <option value="hourly">/ Hour</option>
+                      <option value="monthly">/ Month</option>
+                      <option value="annual">/ Year</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="input-field-group">
+                  <label for="expense-amount-input" class="field-label-sm">Target Expense Amount ($):</label>
+                  <input type="number" id="expense-amount-input" class="glass-select" value="1200" min="1" step="any">
+                </div>
+              </div>
+
+              <!-- Output Metrics -->
+              <div class="stats-grid-3">
+                <div class="stat-metric-box">
+                  <div id="wage-hours-res" class="stat-metric-val">34.3 hrs</div>
+                  <div class="stat-metric-label">Labor Hours</div>
+                </div>
+                <div class="stat-metric-box">
+                  <div id="wage-days-res" class="stat-metric-val">4.3 days</div>
+                  <div class="stat-metric-label">Workdays (8h)</div>
+                </div>
+                <div class="stat-metric-box">
+                  <div id="wage-weeks-res" class="stat-metric-val">0.9 wks</div>
+                  <div class="stat-metric-label">Work Weeks (40h)</div>
+                </div>
+              </div>
+
+              <div id="wage-narrative-text" class="lifestyle-narrative-box">
+                Represents about 4.3 full workdays of dedicated labor.
+              </div>
+            </div>
+
+            <!-- Compound Interest & Wealth Projector -->
+            <div class="chart-container-box">
+              <div class="chart-header-row">
+                <div class="section-heading-group">
+                  <h3 class="section-title">Compound Interest & Growth Projector</h3>
+                  <p class="section-subtitle">Project long-term wealth accumulation over time</p>
+                </div>
+                <div class="chart-stats-pills">
+                  <div class="stat-metric-pill">
+                    <span class="metric-pill-label">Total Balance:</span>
+                    <span id="inv-total-balance" class="metric-pill-val">$0</span>
+                  </div>
+                  <div class="stat-metric-pill">
+                    <span class="metric-pill-label">Contributed:</span>
+                    <span id="inv-total-contrib" class="metric-pill-val metric-contrib">$0</span>
+                  </div>
+                  <div class="stat-metric-pill">
+                    <span class="metric-pill-label">Interest Earned:</span>
+                    <span id="inv-total-interest" class="metric-pill-val metric-interest">$0</span>
+                  </div>
+                  <div class="stat-metric-pill">
+                    <span class="metric-pill-label">Growth:</span>
+                    <span id="inv-multiplier-badge" class="metric-pill-val metric-multiplier">0x</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Controls Row -->
+              <div class="compound-inputs-grid">
+                <div class="input-field-group">
+                  <label for="inv-principal-input" class="field-label-sm">Initial Deposit ($):</label>
+                  <input type="number" id="inv-principal-input" class="glass-select" value="1000">
+                </div>
+                <div class="input-field-group">
+                  <label for="inv-monthly-input" class="field-label-sm">Monthly Deposit ($):</label>
+                  <input type="number" id="inv-monthly-input" class="glass-select" value="250">
+                </div>
+                <div class="input-field-group">
+                  <label for="inv-rate-input" class="field-label-sm">Annual Return (%):</label>
+                  <input type="number" id="inv-rate-input" class="glass-select" value="8.5" step="0.1">
+                </div>
+                <div class="input-field-group">
+                  <div class="slider-header-row">
+                    <label for="inv-years-slider" class="field-label-sm">Time Horizon:</label>
+                    <span id="inv-years-display" class="slider-years-val">15 Years</span>
+                  </div>
+                  <input type="range" id="inv-years-slider" min="1" max="40" value="15" class="slider-input">
+                </div>
+              </div>
+
+              <!-- Dynamic Canvas Chart -->
+              <canvas id="compound-growth-canvas" class="growth-canvas" width="800" height="240" aria-label="Investment growth projection chart"></canvas>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- MODE 5: RECIPE / CHEF CALCULATOR               -->
+        <!-- ============================================== -->
+        <div class="mode-panel" data-mode-panel="chef">
+          <div class="chef-wrap">
+            <div class="chef-header-bar">
+              <div class="recipe-selector-group">
+                <label for="chef-recipe-select" class="field-label-sm">Select Recipe:</label>
+                <select id="chef-recipe-select" class="glass-select">
+                  <option value="sourdough">Artisan Sourdough Loaf</option>
+                  <option value="cookies">Ultimate Chocolate Chip Cookies</option>
+                  <option value="pizza">Neapolitan Pizza Dough (65% Hydration)</option>
+                </select>
+              </div>
+              <div id="chef-yield-display" class="recipe-yield-badge">Yield: 1 loaf (800g) × 1.0</div>
+            </div>
+
+            <!-- Recipe Scaling Factor Bar -->
+            <div class="scale-pills-row">
+              <span class="field-label-sm">Scale Factor:</span>
+              <button class="scale-pill" data-chef-scale="0.5">0.5x (Half)</button>
+              <button class="scale-pill" data-chef-scale="1.0">1x (Original)</button>
+              <button class="scale-pill" data-chef-scale="1.5">1.5x</button>
+              <button class="scale-pill" data-chef-scale="2.0">2x (Double)</button>
+              <button class="scale-pill" data-chef-scale="3.0">3x (Triple)</button>
+              <button class="scale-pill" data-chef-scale="4.0">4x (Party)</button>
+              <div class="custom-scale-group">
+                <label for="chef-scale-factor" class="field-label-sm">Custom:</label>
+                <input type="number" id="chef-scale-factor" class="glass-select custom-scale-input" value="1.0" min="0.1" step="0.1">
+              </div>
+            </div>
+
+            <!-- Scaled Ingredients Table -->
+            <div class="chef-table-wrap">
+              <table class="chef-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Ingredient</th>
+                    <th scope="col" style="text-align:right;">Scaled Amount</th>
+                    <th scope="col" style="text-align:right;">Original Base</th>
+                  </tr>
+                </thead>
+                <tbody id="chef-ingredients-tbody"></tbody>
+              </table>
+            </div>
+
+            <!-- Culinary Density Weight-to-Volume Converter -->
+            <div class="stats-card-mini">
+              <div class="section-title-sm" style="margin-bottom:8px;">Culinary Density Converter (Weight ↔ Volume)</div>
+              <div class="density-converter-grid">
+                <div class="input-field-group">
+                  <label for="chef-density-ingredient" class="field-label-sm">Ingredient:</label>
+                  <select id="chef-density-ingredient" class="glass-select">
+                    <option value="ap_flour">All-Purpose Flour (1 cup = 120g)</option>
+                    <option value="bread_flour">Bread Flour (1 cup = 127g)</option>
+                    <option value="granulated_sugar">Granulated Sugar (1 cup = 200g)</option>
+                    <option value="brown_sugar">Brown Sugar Packed (1 cup = 220g)</option>
+                    <option value="powdered_sugar">Powdered / Icing Sugar (1 cup = 120g)</option>
+                    <option value="butter">Unsalted Butter (1 cup = 227g / 1 stick = 113.5g)</option>
+                    <option value="whole_milk">Whole Milk (1 cup = 245g)</option>
+                    <option value="water">Water / Broth (1 cup = 236.6g)</option>
+                    <option value="honey">Honey / Maple Syrup (1 cup = 340g)</option>
+                    <option value="rolled_oats">Rolled Oats (1 cup = 90g)</option>
+                    <option value="cocoa_powder">Cocoa Powder (1 cup = 100g)</option>
+                  </select>
+                </div>
+
+                <div class="input-field-group">
+                  <label for="chef-density-val-a" class="field-label-sm">Amount A:</label>
+                  <div class="input-with-addon">
+                    <input type="number" id="chef-density-val-a" class="glass-select" value="250">
+                    <select id="chef-density-unit-a" class="glass-select" aria-label="Source Unit">
+                      <option value="g">grams (g)</option>
+                      <option value="oz">ounces (oz)</option>
+                      <option value="cup">cups</option>
+                      <option value="tbsp">tbsp</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="input-field-group">
+                  <label for="chef-density-val-b" class="field-label-sm">Amount B:</label>
+                  <div class="input-with-addon">
+                    <input type="number" id="chef-density-val-b" class="glass-select" value="0">
+                    <select id="chef-density-unit-b" class="glass-select" aria-label="Target Unit">
+                      <option value="cup">cups</option>
+                      <option value="tbsp">tbsp</option>
+                      <option value="g">grams (g)</option>
+                      <option value="oz">ounces (oz)</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ============================================== -->
+        <!-- MODE 6: PROGRAMMER CALCULATOR                  -->
+        <!-- ============================================== -->
+        <div class="mode-panel" data-mode-panel="programmer">
+          <div class="prog-wrap">
+
+            <!-- Word Size & Representation Header -->
+            <div class="prog-header-bar">
+              <div class="prog-word-size-group">
+                <label for="prog-word-size" class="field-label-sm">Word Size:</label>
+                <select id="prog-word-size" class="glass-select">
+                  <option value="64">64-bit (QWORD)</option>
+                  <option value="32">32-bit (DWORD)</option>
+                  <option value="16">16-bit (WORD)</option>
+                  <option value="8">8-bit (BYTE)</option>
+                </select>
+              </div>
+
+              <div class="prog-meta-indicators">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="prog-signed-toggle">
+                  <span>Signed (2's Complement)</span>
+                </label>
+                <span id="prog-ascii-badge" class="tag-badge badge-ascii">ASCII: 'A'</span>
+                <span id="prog-popcnt-badge" class="tag-badge">POPCNT: 0</span>
+                <span id="prog-clz-badge" class="tag-badge">CLZ: 0</span>
+              </div>
+            </div>
+
+            <!-- Synchronized Hex / Dec / Oct / Bin Grid -->
+            <div class="prog-bases-grid">
+              <div class="prog-base-card">
+                <div class="prog-base-label">HEXADECIMAL (16)</div>
+                <input type="text" id="prog-val-hex" class="prog-base-input" spellcheck="false" aria-label="Hexadecimal representation">
+              </div>
+              <div class="prog-base-card">
+                <div class="prog-base-label">DECIMAL (10)</div>
+                <input type="text" id="prog-val-dec" class="prog-base-input" spellcheck="false" aria-label="Decimal representation">
+              </div>
+              <div class="prog-base-card">
+                <div class="prog-base-label">OCTAL (8)</div>
+                <input type="text" id="prog-val-oct" class="prog-base-input" spellcheck="false" aria-label="Octal representation">
+              </div>
+              <div class="prog-base-card">
+                <div class="prog-base-label">BINARY (2)</div>
+                <input type="text" id="prog-val-bin" class="prog-base-input" spellcheck="false" aria-label="Binary representation">
+              </div>
+            </div>
+
+            <!-- Interactive Clickable Bitboard Grid -->
+            <div class="bitboard-box">
+              <div class="section-title-sm">Interactive Bitboard (Click any bit to toggle 0 ↔ 1)</div>
+              <div id="prog-bitboard-grid" class="bitboard-grid" role="group" aria-label="Bitboard interactive grid"></div>
+            </div>
+
+            <!-- Bitwise Operations Keypad -->
+            <div class="prog-logic-keypad" role="group" aria-label="Bitwise operations">
+              <button class="key-btn btn-fn" data-prog-op="AND">AND</button>
+              <button class="key-btn btn-fn" data-prog-op="OR">OR</button>
+              <button class="key-btn btn-fn" data-prog-op="XOR">XOR</button>
+              <button class="key-btn btn-fn" data-prog-op="NOT">NOT</button>
+              <button class="key-btn btn-fn" data-prog-op="SHL">&lt;&lt; SHL</button>
+              <button class="key-btn btn-fn" data-prog-op="SHR">&gt;&gt; SHR</button>
+              <button class="key-btn btn-fn" data-prog-op="ROL">ROL</button>
+              <button class="key-btn btn-fn" data-prog-op="ROR">ROR</button>
+              <button class="key-btn btn-action-clear" data-prog-op="CLR">CLR</button>
+            </div>
+
+          </div>
+        </div>
+
+      </section>
+
+      <!-- COLUMN 3: RIGHT WORKSPACE (Calculation History & Tools) -->
+      <aside class="glass-card workspace-panel" aria-label="Calculation History">
+        <div class="history-header">
+          <div class="section-title-sm" style="margin:0;">History</div>
+          <span id="history-count-badge" class="tag-badge" aria-label="Calculation count">0</span>
+        </div>
+
+        <!-- Filter Search Bar -->
+        <input type="text" id="history-search-input" class="history-search-input" placeholder="Search past calculations..." aria-label="Search history calculations">
+
+        <!-- History Tape Entries Container -->
+        <div id="history-items-container" class="history-items-container" role="feed" aria-label="Past calculations list">
+          <div class="history-empty-card">
+            <div class="empty-icon">🧮</div>
+            <div class="empty-title">No calculations yet</div>
+            <div class="empty-sub">Your recent calculations will appear here.</div>
+            <div class="empty-try-box">
+              <span class="try-label">Try:</span>
+              <button type="button" class="btn-try-example" data-try-calc="125 × 48">125 × 48</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Export & Clear Actions -->
+        <div class="history-footer-actions">
+          <button id="btn-export-slip" class="glass-btn" style="flex:1;" title="Copy Receipt Slip" aria-label="Copy receipt slip">
+            <span aria-hidden="true">🧾</span>
+            <span>Slip</span>
+          </button>
+          <button id="btn-export-markdown" class="glass-btn" style="flex:1;" title="Download Markdown" aria-label="Download markdown history">
+            <span aria-hidden="true">📄</span>
+            <span>.MD</span>
+          </button>
+          <button id="btn-export-csv" class="glass-btn" style="flex:1;" title="Download CSV" aria-label="Download CSV history">
+            <span aria-hidden="true">📊</span>
+            <span>.CSV</span>
+          </button>
+          <button id="btn-clear-history" class="glass-btn btn-danger-action" title="Clear all history" aria-label="Clear all calculation history">
+            <span aria-hidden="true">🗑️</span>
+          </button>
+        </div>
+      </aside>
+
+    </main>
+
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: PEMDAS / BODMAS ORDER OF OPERATIONS    -->
+  <!-- ============================================== -->
+  <div id="modal-pemdas-steps" class="cyber-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-steps-title">
+    <div class="cyber-modal-dialog">
+      <div class="modal-header">
+        <div>
+          <h2 id="modal-steps-title" class="modal-title">Order of Operations (PEMDAS / BODMAS)</h2>
+          <div class="modal-subtitle-mono" id="pemdas-expr-title">—</div>
+        </div>
+        <button class="modal-close-btn" data-modal-close="true" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body" id="pemdas-steps-container">
+        <!-- Injected dynamically by visualizer.js -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- MODAL: KEYBOARD SHORTCUTS REFERENCE GUIDE     -->
+  <!-- ============================================== -->
+  <div id="modal-shortcuts-guide" class="cyber-modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-shortcuts-title">
+    <div class="cyber-modal-dialog">
+      <div class="modal-header">
+        <h2 id="modal-shortcuts-title" class="modal-title">Keyboard Navigation & Shortcuts</h2>
+        <button class="modal-close-btn" data-modal-close="true" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body">
+        <table class="inspector-table">
+          <thead>
+            <tr>
+              <th scope="col">Key</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="font-mono text-cyan">0 - 9, .</td><td>Input numbers and decimals</td></tr>
+            <tr><td class="font-mono text-cyan">+, -, *, /</td><td>Basic arithmetic operations</td></tr>
+            <tr><td class="font-mono text-cyan">Enter or =</td><td>Execute calculation</td></tr>
+            <tr><td class="font-mono text-cyan">Backspace</td><td>Delete last character</td></tr>
+            <tr><td class="font-mono text-cyan">Escape</td><td>Clear entire calculation (AC)</td></tr>
+            <tr><td class="font-mono text-cyan">^, %</td><td>Exponentiation, Percentage</td></tr>
+            <tr><td class="font-mono text-cyan">( , )</td><td>Grouping parentheses</td></tr>
+            <tr><td class="font-mono text-cyan">Alt + 1..6</td><td>Switch computation mode instantly</td></tr>
+            <tr><td class="font-mono text-cyan">?</td><td>Toggle this shortcuts dialog</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Mount -->
+  <div id="toast-notifications-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Modular Application Scripts -->
+  <script src="js/audio.js"></script>
+  <script src="js/math-engine.js"></script>
+  <script src="js/notebook-engine.js"></script>
+  <script src="js/converters.js"></script>
+  <script src="js/lifestyle-engine.js"></script>
+  <script src="js/chef-engine.js"></script>
+  <script src="js/programmer-engine.js"></script>
+  <script src="js/history-engine.js"></script>
+  <script src="js/visualizer.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

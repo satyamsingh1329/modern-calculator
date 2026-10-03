@@ -1,0 +1,21 @@
+{
+  "name": "omnicalc",
+  "version": "1.0.0",
+  "description": "OmniCalc: An ultra-interactive, futuristic, all-in-one calculator web application with standard/scientific pad, smart notebook, universal converters, lifestyle finance models, recipe calculator, and programmer bitboard.",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx -y serve -l 3000 .",
+    "start": "npx -y serve -l 3000 ."
+  },
+  "keywords": [
+    "calculator",
+    "scientific",
+    "glassmorphism",
+    "notebook",
+    "unit-converter",
+    "programmer-calculator",
+    "omnicalc"
+  ],
+  "author": "OmniCalc Architect",
+  "license": "MIT"
+}
